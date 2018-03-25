@@ -30,8 +30,17 @@ for i in range(0,numOfC):				#sets initial cluster centroids
 	k.append((x[i],y[i]))
 
 for i in range(numOfC,len(x)):
-	print(assignCluster(k,(x[i],y[i])))
+	group = assignCluster(k,(x[i],y[i]))
+	if group == 1:
+		c = 'ro'
+	elif group == 2:
+		c = 'bo'
+	elif group == 3:
+		c = 'ko'
+	elif group == 4:
+		c = 'mo'
+	elif group == 5:
+		c = 'yo'
+	plt.plot(x[i],y[i],c)
 
-plt.plot(5,5,'bo')
-plt.plot(6,6,'ro')
 plt.show()
