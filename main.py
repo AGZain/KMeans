@@ -9,7 +9,7 @@ def assignCluster(clusters, vals):
 	for i in range(0,len(clusters)):
 		dist = math.sqrt(math.pow(float(vals[0])-float(clusters[i][0]),2.) + math.pow(float(vals[1])-float(clusters[i][1]),2.))
 		print(dist)
-		if dist < lowest[1] or new == True:
+		if dist > lowest[1] or new == True:
 			lowest = (i+1, dist)
 			new = False
 	return lowest[0]
@@ -20,7 +20,7 @@ k = []
 numOfC = 4
 
 
-with open('data/k-means/exercise-2.csv', 'rb') as csvfile:
+with open('data/k-means/exercise-6.csv', 'rb') as csvfile:
 	read = csv.reader(csvfile,delimiter=',',quotechar='|')
 	for row in read:
 		x.append(row[0])
@@ -35,47 +35,64 @@ for i in range(0,len(x)):
 	x[i] = float(x[i])
 	y[i] = float(y[i])
 
-# for i in range(0,numOfC):				#sets initial cluster centroids
-# 	k.append((x[i],y[i]))
-# 	grps[i] += 1
-# 	if i == 0:
-# 		col[i] = 'r'
-# 	elif i == 1:
-# 		col[i] = 'b'
-# 	elif i == 2:
-# 		col[i] = 'k'
-# 	elif i == 3:
-# 		col[i] = 'm'
-# 	elif i == 4:
-# 		col[i] = 'y'
+for i in range(0,numOfC):				#sets initial cluster centroids
+	k.append((x[i],y[i]))
+	grps[i] += 1
+	if i == 0:
+		col[i] = 'r'
+	elif i == 1:
+		col[i] = 'b'
+	elif i == 2:
+		col[i] = 'k'
+	elif i == 3:
+		col[i] = 'm'
+	elif i == 4:
+		col[i] = 'y'
 # k.append((4.,52.5))
 # k.append((83.,21.))
-# #k.append((111.,125.))
+# k.append((111.,125.))
 # k.append((36.,152.))
-started = False
-k1 = [0.,0.]
-for i in range(0,len(x)):
-	if started == False:
-		k1[0] = x[i]
-		k1[1] = y[i]
-		started = True
-	if x[i] >= k1[0] and y[i] >= k1[1]:
-		k1[0] = x[i]
-		k1[1] = y[i]
-		print("FOUND: " + str(k1[0]) + "    " + str(k1[1]))
-k.append((k1[0],k1[1]))
-print("FOUND: " + str(k1[0]) + "    " + str(k1[1]))
-k.append((0,0))
-k.append((0,0))
-k.append((0,0))
-#PROBLEM IS HERE
-for i in range(1,numOfC):
-	dist = [None]*i
-	lowestDist = 0
-	for j in range(0,len(x)):
-		dist[i-1] = math.sqrt(math.pow(float(x[j])-float(k[i-1][0]),2.) + math.pow(float(y[j])-float(k[i-1][1]),2.))
-	if dist[i-1] > lowestDist:
-		k[i] = (x[j],y[j])
+# started = False
+# k1 = [0.,0.]
+# for i in range(0,len(x)):
+# 	if started == False:
+# 		k1[0] = x[i]
+# 		k1[1] = y[i]
+# 		started = True
+# 		grps[0] += 1
+# 	if x[i] >= k1[0] and y[i] >= k1[1]:
+# 		k1[0] = x[i]
+# 		k1[1] = y[i]
+# 		print("FOUND: " + str(k1[0]) + "    " + str(k1[1]))
+# k.append((k1[0],k1[1]))
+# print("FOUND: " + str(k1[0]) + "    " + str(k1[1]))
+# k.append((0,0))
+# k.append((0,0))
+# k.append((0,0))
+#
+# #PROBLEM IS HERE
+# for i in range(1,numOfC):
+# 	dist = [None]*i
+# 	highest = [0]*i
+#
+# 	for j in range(0,len(x)):
+# 		dist[i-1] = math.sqrt(math.pow(float(x[j])-float(k[i-1][0]),2.) + math.pow(float(y[j])-float(k[i-1][1]),2.))
+# 		if i== 1:
+# 			if dist[i-1] > highest[i-1]:
+# 				k[i] = (x[j],y[j])
+# 				highest[i-1] = dist[i-1]
+# 		if i ==2:
+# 			if dist[0] >= highest[0] and dist[1] >= highest[1]:
+# 				k[i] = (x[j],y[j])
+# 				highest[0] = dist[0]
+# 				highest[1] = dist[1]
+# 		if i ==3:
+# 			if dist[0] >= highest[0] and dist[1] >= highest[1] and dist[2] >= highest[2]:
+# 				k[i] = (x[j],y[j])
+# 				highest[0] = dist[0]
+# 				highest[1] = dist[1]
+# 				highest[2] = dist[2]
+# 		grps[i] += 1
 
 for i in range(0,len(x)):
 	group = assignCluster(k,(x[i],y[i]))
