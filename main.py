@@ -3,6 +3,18 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
+def color(grp):
+    if grp == 1:
+        return 'r'
+    elif grp == 2:
+        return 'b'
+    elif grp == 3:
+        return 'k'
+    elif grp == 4:
+        return 'm'
+    elif grp == 5:
+        return 'y'
+
 def assignCluster(clusters, vals):
 	lowest = (0,0)					#location, value
 	new = True
@@ -13,133 +25,64 @@ def assignCluster(clusters, vals):
 			lowest = (i+1, dist)
 			new = False
 	return lowest[0]
+def start():
+    with open('data/k-means/exercise-6.csv', 'rb') as csvfile:
+    	read = csv.reader(csvfile,delimiter=',',quotechar='|')
+    	for row in read:
+    		x.append(row[0])
+    		y.append(row[1])
+
+    x.pop(0)
+    y.pop(0)
+
+    for i in range(0,len(x)):
+    	x[i] = float(x[i])
+    	y[i] = float(y[i])
+def initialClusters():
+    for i in range(0,numOfC):				#sets initial cluster centroids
+        k.append((x[i],y[i]))
+        print("initiral centroid: " + str((x[i],y[i])))
+        grps[i] += 1
+        col[i] = color(i+1)
+def assignAll():
+    for i in range(0,len(x)):
+        group = assignCluster(k,(x[i],y[i]))
+        print(group)
+        grps[group-1] += 1
+        k[group-1] = ((float(k[group-1][0])*grps[group-1] + float(x[i]))/(float(grps[group-1])+1),(float(k[group-1][1])*grps[group-1] + float(y[i]))/(float(grps[group-1])+1))
+        print((x[i],y[i]))
+        print(k[group-1])
+        col[i] = color(group)
+def confirm():
+    for z in range(0,1000):
+        for i in range(0,len(x)):
+            dist = [None]*numOfC
+            new = True
+            lowest = 0
+            group = -1
+            for j in range(0,numOfC):
+                dist[j] = math.sqrt(math.pow(float(x[i])-float(k[j][0]),2.) + math.pow(float(y[i])-float(k[j][1]),2.))
+                if new == True or lowest > dist[j]:
+                    lowest = dist[j]
+                    group = j
+                    new = False
+            group += 1
+            grps[group-1] += 1
+            k[group-1] = ((float(k[group-1][0])*grps[group-1] + float(x[i]))/(float(grps[group-1])+1),(float(k[group-1][1])*grps[group-1] + float(y[i]))/(float(grps[group-1]+1)))
+            theCol = color(group)
+            if theCol != col[i]:
+                col[i] = theCol
 
 x = []
 y = []
 k = []
 numOfC = 4
-
-
-with open('data/k-means/exercise-6.csv', 'rb') as csvfile:
-	read = csv.reader(csvfile,delimiter=',',quotechar='|')
-	for row in read:
-		x.append(row[0])
-		y.append(row[1])
-
-x.pop(0)
-y.pop(0)
 grps = [0]*numOfC
+start()
 col = np.chararray(len(x))
-
-for i in range(0,len(x)):
-	x[i] = float(x[i])
-	y[i] = float(y[i])
-
-for i in range(0,numOfC):				#sets initial cluster centroids
-	k.append((x[i],y[i]))
-	grps[i] += 1
-	if i == 0:
-		col[i] = 'r'
-	elif i == 1:
-		col[i] = 'b'
-	elif i == 2:
-		col[i] = 'k'
-	elif i == 3:
-		col[i] = 'm'
-	elif i == 4:
-		col[i] = 'y'
-# k.append((4.,52.5))
-# k.append((83.,21.))
-# k.append((111.,125.))
-# k.append((36.,152.))
-# started = False
-# k1 = [0.,0.]
-# for i in range(0,len(x)):
-# 	if started == False:
-# 		k1[0] = x[i]
-# 		k1[1] = y[i]
-# 		started = True
-# 		grps[0] += 1
-# 	if x[i] >= k1[0] and y[i] >= k1[1]:
-# 		k1[0] = x[i]
-# 		k1[1] = y[i]
-# 		print("FOUND: " + str(k1[0]) + "    " + str(k1[1]))
-# k.append((k1[0],k1[1]))
-# print("FOUND: " + str(k1[0]) + "    " + str(k1[1]))
-# k.append((0,0))
-# k.append((0,0))
-# k.append((0,0))
-#
-# #PROBLEM IS HERE
-# for i in range(1,numOfC):
-# 	dist = [None]*i
-# 	highest = [0]*i
-#
-# 	for j in range(0,len(x)):
-# 		dist[i-1] = math.sqrt(math.pow(float(x[j])-float(k[i-1][0]),2.) + math.pow(float(y[j])-float(k[i-1][1]),2.))
-# 		if i== 1:
-# 			if dist[i-1] > highest[i-1]:
-# 				k[i] = (x[j],y[j])
-# 				highest[i-1] = dist[i-1]
-# 		if i ==2:
-# 			if dist[0] >= highest[0] and dist[1] >= highest[1]:
-# 				k[i] = (x[j],y[j])
-# 				highest[0] = dist[0]
-# 				highest[1] = dist[1]
-# 		if i ==3:
-# 			if dist[0] >= highest[0] and dist[1] >= highest[1] and dist[2] >= highest[2]:
-# 				k[i] = (x[j],y[j])
-# 				highest[0] = dist[0]
-# 				highest[1] = dist[1]
-# 				highest[2] = dist[2]
-# 		grps[i] += 1
-
-for i in range(0,len(x)):
-	group = assignCluster(k,(x[i],y[i]))
-	print(group)
-	grps[group-1] += 1
-	k[group-1] = ((float(k[group-1][0])*grps[group-1] + float(x[i]))/(float(grps[group-1])+1),(float(k[group-1][1])*grps[group-1] + float(y[i]))/(float(grps[group-1])+1))
-	#k[group-1] = ((float(k[group-1][0]) + float(x[i]))/2.,(float(k[group-1][1])*n + float(y[i]))/(n+1))
-	print((x[i],y[i]))
-
-	print(k[group-1])
-	if group == 1:
-		col[i] = 'r'
-	elif group == 2:
-		col[i] = 'b'
-	elif group == 3:
-		col[i] = 'k'
-	elif group == 4:
-		col[i] = 'm'
-	elif group == 5:
-		col[i] = 'y'
-
-for z in range(0,1000):
-	for i in range(0,len(x)):
-		dist = [None]*numOfC
-		new = True
-		lowest = 0
-		group = -1
-		for j in range(0,numOfC):
-			dist[j] = math.sqrt(math.pow(float(x[i])-float(k[j][0]),2.) + math.pow(float(y[i])-float(k[j][1]),2.))
-			if new == True or lowest > dist[j]:
-				lowest = dist[j]
-				group = j
-				new = False
-
-		group += 1
-		grps[group-1] += 1
-		k[group-1] = ((float(k[group-1][0])*grps[group-1] + float(x[i]))/(float(grps[group-1])+1),(float(k[group-1][1])*grps[group-1] + float(y[i]))/(float(grps[group-1]+1)))
-		if group == 1:
-			col[i] = 'r'
-		elif group == 2:
-			col[i] = 'b'
-		elif group == 3:
-			col[i] = 'k'
-		elif group == 4:
-			col[i] = 'm'
-		elif group == 5:
-			col[i] = 'y'
+initialClusters()
+assignAll()
+confirm()
 
 plt.scatter(x,y,c=col,marker='o')
 plt.show()
