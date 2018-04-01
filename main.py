@@ -2,8 +2,9 @@ import csv
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+#import time
 
-def color(grp):
+def color(grp):                 #method to return the colour of the group
     if grp == 1:
         return 'r'
     elif grp == 2:
@@ -15,33 +16,33 @@ def color(grp):
     elif grp == 5:
         return 'y'
 
-def assignCluster(clusters, vals):
+def assignCluster(clusters, vals):  #assign points to intial cluster
 	lowest = (0,0)					#location, value
 	new = True
-	for i in range(0,len(clusters)):
+	for i in range(0,len(clusters)):   #Loop through each cluster
 		dist = math.sqrt(math.pow(float(vals[0])-float(clusters[i][0]),2.) + math.pow(float(vals[1])-float(clusters[i][1]),2.))
-		print(dist)
 		if dist > lowest[1] or new == True:
 			lowest = (i+1, dist)
 			new = False
 	return lowest[0]
-def start():
-    with open('data/k-means/exercise-6.csv', 'rb') as csvfile:
+
+def start():                            #Get data from files
+    with open('data/k-means/exercise-2.csv', 'r') as csvfile:
     	read = csv.reader(csvfile,delimiter=',',quotechar='|')
     	for row in read:
-    		x.append(row[0])
+    		x.append(row[0])             #Add x and y points
     		y.append(row[1])
 
-    x.pop(0)
+    x.pop(0)                             #Remove the headings of the columns
     y.pop(0)
 
     for i in range(0,len(x)):
     	x[i] = float(x[i])
     	y[i] = float(y[i])
+
 def initialClusters():
     for i in range(0,numOfC):				#sets initial cluster centroids
         k.append((x[i],y[i]))
-        print("initiral centroid: " + str((x[i],y[i])))
         grps[i] += 1
         col[i] = color(i+1)
 def assignAll():
@@ -53,7 +54,8 @@ def assignAll():
         print((x[i],y[i]))
         print(k[group-1])
         col[i] = color(group)
-def confirm():
+
+def confirm():                                  #reassigning clusters
     for z in range(0,1000):
         for i in range(0,len(x)):
             dist = [None]*numOfC
