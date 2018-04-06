@@ -2,7 +2,7 @@ import csv
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-#import time
+import time
 
 def color(grp):                 #method to return the colour of the group
     if grp == 1:
@@ -48,11 +48,8 @@ def initialClusters():
 def assignAll():
     for i in range(0,len(x)):
         group = assignCluster(k,(x[i],y[i]))
-        print(group)
         grps[group-1] += 1
         k[group-1] = ((float(k[group-1][0])*grps[group-1] + float(x[i]))/(float(grps[group-1])+1),(float(k[group-1][1])*grps[group-1] + float(y[i]))/(float(grps[group-1])+1))
-        print((x[i],y[i]))
-        print(k[group-1])
         col[i] = color(group)
 
 def confirm():                                  #reassigning clusters
@@ -75,6 +72,7 @@ def confirm():                                  #reassigning clusters
             if theCol != col[i]:
                 col[i] = theCol
 
+start_time = time.time()
 x = []
 y = []
 k = []
@@ -85,6 +83,6 @@ col = np.chararray(len(x))
 initialClusters()
 assignAll()
 confirm()
-
+print("--- %s seconds ---" % (time.time() - start_time))
 plt.scatter(x,y,c=col,marker='o')
 plt.show()
